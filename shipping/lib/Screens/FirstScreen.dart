@@ -1,4 +1,3 @@
-import 'package:shipping/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shipping/Widgets/List.dart';
 

@@ -1,5 +1,7 @@
-import 'package:shipping/main.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shipping/Screens/third_screen.dart';
+import 'package:shipping/controller/api_controller.dart';
 
 class SecondScreen extends StatefulWidget {
   @override
@@ -7,13 +9,20 @@ class SecondScreen extends StatefulWidget {
 }
 
 class _SecondScreenState extends State<SecondScreen> {
+  TextEditingController _nameFrom = TextEditingController();
+  TextEditingController _addressFrom = TextEditingController();
+  TextEditingController _cityFrom = TextEditingController();
+  TextEditingController _zipCodeFrom = TextEditingController();
+  TextEditingController _stateFrom = TextEditingController();
+  TextEditingController _nameTo = TextEditingController();
+  TextEditingController _addressTo = TextEditingController();
+  TextEditingController _cityTo = TextEditingController();
+  TextEditingController _zipCodeTo = TextEditingController();
+  TextEditingController _stateTo = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController _nameFrom = TextEditingController();
-    TextEditingController _addressFrom = TextEditingController();
-    TextEditingController _cityFrom = TextEditingController();
-    TextEditingController _zipCodeFrom = TextEditingController();
-    TextEditingController _stateFrom = TextEditingController();
+    ApiController api = Get.put(ApiController());
     double widthStep = MediaQuery.of(context).size.width;
     double heightStep = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -31,7 +40,7 @@ class _SecondScreenState extends State<SecondScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: heightStep / 3000),
                   child: Container(
-                    height: 300,
+                    height: 350,
                     width: 450,
                     child: Card(
                       elevation: 10.0,
@@ -57,12 +66,22 @@ class _SecondScreenState extends State<SecondScreen> {
                               return null;
                             },
                           ),
+                          TextFormField(
+                            decoration: InputDecoration(hintText: "City"),
+                            controller: _cityFrom,
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'City';
+                              }
+                              return null;
+                            },
+                          ),
                           // SizedBox(
                           //   height: 30,
                           // ),
                           TextFormField(
                             decoration: InputDecoration(hintText: "Address"),
-                            controller: _nameFrom,
+                            controller: _addressFrom,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Address';
@@ -72,7 +91,7 @@ class _SecondScreenState extends State<SecondScreen> {
                           ),
                           TextFormField(
                             decoration: InputDecoration(hintText: "State"),
-                            controller: _nameFrom,
+                            controller: _stateFrom,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'State';
@@ -82,7 +101,7 @@ class _SecondScreenState extends State<SecondScreen> {
                           ),
                           TextFormField(
                             decoration: InputDecoration(hintText: "Zip Code"),
-                            controller: _nameFrom,
+                            controller: _zipCodeFrom,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Zip Code';
@@ -98,7 +117,7 @@ class _SecondScreenState extends State<SecondScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: heightStep / 3000),
                   child: Container(
-                    height: 300,
+                    height: 350,
                     width: 450,
                     child: Card(
                       elevation: 10.0,
@@ -116,7 +135,7 @@ class _SecondScreenState extends State<SecondScreen> {
                           ),
                           TextFormField(
                             decoration: InputDecoration(hintText: "Name"),
-                            controller: _nameFrom,
+                            controller: _nameTo,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Name';
@@ -128,8 +147,18 @@ class _SecondScreenState extends State<SecondScreen> {
                           //   height: 30,
                           // ),
                           TextFormField(
+                            decoration: InputDecoration(hintText: "city"),
+                            controller: _cityTo,
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'City';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
                             decoration: InputDecoration(hintText: "Address"),
-                            controller: _nameFrom,
+                            controller: _addressTo,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Address';
@@ -139,7 +168,7 @@ class _SecondScreenState extends State<SecondScreen> {
                           ),
                           TextFormField(
                             decoration: InputDecoration(hintText: "State"),
-                            controller: _nameFrom,
+                            controller: _stateTo,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'State';
@@ -149,7 +178,7 @@ class _SecondScreenState extends State<SecondScreen> {
                           ),
                           TextFormField(
                             decoration: InputDecoration(hintText: "Zip Code"),
-                            controller: _nameFrom,
+                            controller: _zipCodeTo,
                             validator: (String value) {
                               if (value.isEmpty) {
                                 return 'Zip Code';
@@ -162,6 +191,19 @@ class _SecondScreenState extends State<SecondScreen> {
                     ),
                   ),
                 ),
+                RaisedButton(
+                  onPressed: () {
+                    //code here
+                    api
+                        .fetchAddress(
+                            address: _addressFrom.text,
+                            city: _cityFrom.text,
+                            state: _stateFrom.text,
+                            zipCode: _zipCodeFrom.text)
+                        .then((value) => Get.to(ThirdScreen()));
+                  },
+                  child: Text("Validate"),
+                )
               ],
             ),
           ),
