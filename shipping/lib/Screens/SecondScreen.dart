@@ -11,11 +11,13 @@ class SecondScreen extends StatefulWidget {
 class _SecondScreenState extends State<SecondScreen> {
   TextEditingController _nameFrom = TextEditingController();
   TextEditingController _addressFrom = TextEditingController();
+  TextEditingController _address2From = TextEditingController();
   TextEditingController _cityFrom = TextEditingController();
   TextEditingController _zipCodeFrom = TextEditingController();
   TextEditingController _stateFrom = TextEditingController();
   TextEditingController _nameTo = TextEditingController();
   TextEditingController _addressTo = TextEditingController();
+  TextEditingController _address2To = TextEditingController();
   TextEditingController _cityTo = TextEditingController();
   TextEditingController _zipCodeTo = TextEditingController();
   TextEditingController _stateTo = TextEditingController();
@@ -32,7 +34,6 @@ class _SecondScreenState extends State<SecondScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            height: heightStep,
             width: widthStep,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -40,7 +41,7 @@ class _SecondScreenState extends State<SecondScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: heightStep / 3000),
                   child: Container(
-                    height: 350,
+                    height: 400,
                     width: 450,
                     child: Card(
                       elevation: 10.0,
@@ -90,6 +91,16 @@ class _SecondScreenState extends State<SecondScreen> {
                             },
                           ),
                           TextFormField(
+                            decoration: InputDecoration(hintText: "Address 2"),
+                            controller: _address2From,
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'Address ';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
                             decoration: InputDecoration(hintText: "State"),
                             controller: _stateFrom,
                             validator: (String value) {
@@ -117,7 +128,7 @@ class _SecondScreenState extends State<SecondScreen> {
                 Padding(
                   padding: EdgeInsets.only(left: heightStep / 3000),
                   child: Container(
-                    height: 350,
+                    height: 450,
                     width: 450,
                     child: Card(
                       elevation: 10.0,
@@ -167,6 +178,16 @@ class _SecondScreenState extends State<SecondScreen> {
                             },
                           ),
                           TextFormField(
+                            decoration: InputDecoration(hintText: "Address 2"),
+                            controller: _address2To,
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return 'Address';
+                              }
+                              return null;
+                            },
+                          ),
+                          TextFormField(
                             decoration: InputDecoration(hintText: "State"),
                             controller: _stateTo,
                             validator: (String value) {
@@ -196,11 +217,12 @@ class _SecondScreenState extends State<SecondScreen> {
                     //code here
                     api
                         .fetchAddress(
-                            address: _addressFrom.text,
-                            city: _cityFrom.text,
-                            state: _stateFrom.text,
-                            zipCode: _zipCodeFrom.text)
-                        .then((value) => Get.to(ThirdScreen()));
+                            address: _addressTo.text,
+                            city: _cityTo.text,
+                            state: _stateTo.text,
+                            address2: _address2To.text,
+                            zipCode: _zipCodeTo.text)
+                        .then((value) => diaLog(context, value));
                   },
                   child: Text("Validate"),
                 )
@@ -211,4 +233,40 @@ class _SecondScreenState extends State<SecondScreen> {
       ),
     );
   }
+}
+
+diaLog(context, map) {
+  showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("Confirm Address"),
+          content: Container(
+            height: 400,
+            child: map['errorMessage'] != ""
+                ? Container(
+                    child: Text('Message:${map['errorMessage']}'),
+                  )
+                : Column(
+                    children: [
+                      Text("City:${map['City']}"),
+                      Text("Address:${map['Address']}"),
+                      Text("Address2:${map['Address2']}"),
+                      Text("State:${map['State']}"),
+                      Text("ZipCode5:${map['ZipCode5']}"),
+                      Text("ZipCode4:${map['ZipCode4']}"),
+                      Text("Message:${map['Text']}")
+                    ],
+                  ),
+          ),
+          actions: [
+            RaisedButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text("Confirmed"),
+            ),
+          ],
+        );
+      });
 }
