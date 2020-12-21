@@ -149,16 +149,17 @@ class _CalculatorPageState extends State<CalculatorPage> {
                 RaisedButton(
                   onPressed: () {
                     //code here
-                    api.getCalculated(
-                        container: container.text,
-                        height: height.text,
-                        length: length.text,
-                        ounce: ounce.text,
-                        pounds: pounds.text,
-                        width: width.text,
-                        zipOrigin: zipOrigin.text,
-                        zipDestination: zipDestination.text);
-                    // .then((value) => diaLog(context, value));
+                    api
+                        .getCalculated(
+                            container: container.text,
+                            height: height.text,
+                            length: length.text,
+                            ounce: ounce.text,
+                            pounds: pounds.text,
+                            width: width.text,
+                            zipOrigin: zipOrigin.text,
+                            zipDestination: zipDestination.text)
+                        .then((value) => diaLog(context, value));
                   },
                   child: Text("Validate"),
                 )
@@ -176,7 +177,7 @@ diaLog(context, map) {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text("Confirm Address"),
+          title: Text("Calculation"),
           content: Container(
             height: 400,
             child
@@ -184,17 +185,28 @@ diaLog(context, map) {
                 //     ? Container(
                 //         child: Text('Message:${map['errorMessage']}'),
                 //       )
-                : Column(
-              children: [
-                for (var data in map['ServiceList']) Text("${data['Price']}")
-                // Text("City:${map['City']}"),
-                // Text("Address:${map['Address']}"),
-                // Text("Address2:${map['Address2']}"),
-                // Text("State:${map['State']}"),
-                // Text("ZipCode5:${map['ZipCode5']}"),
-                // Text("ZipCode4:${map['ZipCode4']}"),
-                // Text("Message:${map['Text']}")
-              ],
+                : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(map["Message"]),
+                  for (var data in map['ServiceList'])
+                    Container(
+                        child: Column(
+                      children: [
+                        Text("Service Name:${data['ServiceName']}"),
+                        Text("Price:${data['Price'].toString()}"),
+                        Divider()
+                      ],
+                    ))
+                  // Text("City:${map['City']}"),a
+                  // Text("Address:${map['Address']}"),
+                  // Text("Address2:${map['Address2']}"),
+                  // Text("State:${map['State']}"),
+                  // Text("ZipCode5:${map['ZipCode5']}"),
+                  // Text("ZipCode4:${map['ZipCode4']}"),
+                  // Text("Message:${map['Text']}")
+                ],
+              ),
             ),
           ),
           actions: [
