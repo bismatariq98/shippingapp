@@ -24,7 +24,11 @@ class ApiController extends GetxController {
       String state,
       String zipCode}) async {
     String requestedUrl =
-        """Verify&XML=AddressValidateRequest USERID="$userId"><Address
+// <<<<<<< HEAD
+//         """Verify&XML=AddressValidateRequest USERID="$userId"><Address
+// =======
+        """Verify&XML=<AddressValidateRequest USERID="$userId"><Address
+>>>>>>> 8063b9c177a82a4b7a4b81f7d9eba92570bf20c8
 ID="0"><Address1>$address</Address1>
 <Address2>$address2</Address2><City>$city</City><State>$state</State><Zip5>$zipCode</Zip5><Zip4></Zip4></Address></AddressValidateRequest>""";
     try {
@@ -103,11 +107,12 @@ ID="0"><Address1>$address</Address1>
 
       print(responsejson['TrackResponse']['TrackInfo']['Error']);
       Map<String, dynamic> addressMap = {
-        "errorMessage":
-            responsejson['TrackResponse']['TrackInfo']['Error'] == null
+        "errorMessage": responsejson['Error'] == null
+            ? responsejson['TrackResponse']['TrackInfo']['Error'] == null
                 ? ""
                 : responsejson['TrackResponse']['TrackInfo']['Error']
-                    ['Description'],
+                    ['Description']
+            : responsejson['Error']['Description'],
         "TrackSummary": responsejson['TrackResponse']['TrackInfo']
                 ['TrackSummary']
             .toString(),
@@ -135,7 +140,7 @@ ID="0"><Address1>$address</Address1>
       String length,
       String height}) async {
     String requestedUrl =
-        """RateV4&XML=<RateV4Request USERID="$userId"><Revision>2</Revision><Package ID="0"><Service>PRIORITY</Service><ZipOrigination>22201</ZipOrigination><ZipDestination>26301</ZipDestination><Pounds>8</Pounds><Ounces>2</Ounces><Container></Container><Width></Width><Length></Length><Height></Height><Girth></Girth><Machinable>TRUE</Machinable></Package></RateV4Request>
+        """RateV4&XML=<RateV4Request USERID="$userId"><Revision>2</Revision><Package ID="0"><Service>PRIORITY</Service><ZipOrigination>$zipOrigin</ZipOrigination><ZipDestination>$zipDestination</ZipDestination><Pounds>$pounds</Pounds><Ounces>$ounce</Ounces><Container>$container</Container><Width>$width</Width><Length>$length</Length><Height>$height</Height><Girth></Girth><Machinable>TRUE</Machinable></Package></RateV4Request>
 """;
     try {
       final http.Response response = await http.get("$httplink$requestedUrl");
@@ -148,16 +153,20 @@ ID="0"><Address1>$address</Address1>
       print(json);
       var responsejson = jsonDecode(json);
       print(responsejson);
-
-      // print(responsejson['TrackResponse']['TrackInfo']['Error']);
+      print(responsejson['Error']);
       Map<String, dynamic> priceMap = {
-        // "errorMessage":
-        //     responsejson['TrackResponse']['TrackInfo']['Error'] == null
-        //         ? ""
-        //         : responsejson['TrackResponse']['TrackInfo']['Error']
-        //             ['Description'],
-        "ServiceList": responsejson['RateV4Response']['Package']['Postage']
-            ['SpecialServices']
+        'Message': responsejson['Error'] == null
+            ? responsejson['RateV4Response']['Package']['Error'] == null
+                ? ""
+                : responsejson['RateV4Response']['Package']['Error']
+                    ['Description']
+            : responsejson['Error']['Description'],
+        "ServiceList": responsejson['Error'] == null
+            ? responsejson['RateV4Response']['Package']['Error'] == null
+                ? responsejson['RateV4Response']['Package']['Postage']
+                    ['SpecialServices']['SpecialService']
+                : []
+            : []
       };
 
       print("http request call");
