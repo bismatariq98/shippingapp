@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shipping/Widgets/List.dart';
+import 'package:get/get.dart';
+import 'package:shipping/controller/api_controllerUps.dart';
 
 class FirstScreen extends StatefulWidget {
   @override
@@ -7,6 +9,7 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
+  ApiControllerUps _apiControllerUps = ApiControllerUps();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +19,9 @@ class _FirstScreenState extends State<FirstScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.favorite),
-            onPressed: () {},
+            onPressed: () {
+              _apiControllerUps.fetchAddress();
+            },
           ),
         ],
       ),

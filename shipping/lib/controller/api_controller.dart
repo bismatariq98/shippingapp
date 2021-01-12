@@ -24,7 +24,7 @@ class ApiController extends GetxController {
       String state,
       String zipCode}) async {
     String requestedUrl =
-        """<Verify&XML=AddressValidateRequest USERID="$userId"><Address
+        """Verify&XML=AddressValidateRequest USERID="$userId"><Address
 ID="0"><Address1>$address</Address1>
 <Address2>$address2</Address2><City>$city</City><State>$state</State><Zip5>$zipCode</Zip5><Zip4></Zip4></Address></AddressValidateRequest>""";
     try {

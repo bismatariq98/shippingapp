@@ -1,0 +1,8 @@
+<?xml version="1.0" ?> <AccessRequest xml:lang='en-US'> <AccessLicenseNumber>FD8C4573039C1FB5
+</AccessLicenseNumber> <UserId>Merganmomar</UserId>
+ <Password>M421516718$m</Password> </AccessRequest> <?xml version="1.0" ?> 
+ <AddressValidationRequest xml:lang='en-US'> <Request> <TransactionReference>
+  <CustomerContext>Your Customer Context</CustomerContext> </TransactionReference> 
+  <RequestAction>AV</RequestAction> </Request> <Address> <City>Alpharetta</City> 
+  <StateProvinceCode>GA</StateProvinceCode> <PostalCode>30005</PostalCode> 
+  <CountryCode>US</CountryCode> </Address> </AddressValidationRequest> 
